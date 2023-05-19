@@ -50,6 +50,7 @@ public class ExamService extends AbstractCringeService<Exam> {
             Exam exam = new Exam();
             exam.setUser(user.get());
             exam.setTicket(ticketOptional.get());
+            exam.setStartDate(new Date().toInstant());
             return repository.save(exam).getId();
         }
         return null;
@@ -58,13 +59,13 @@ public class ExamService extends AbstractCringeService<Exam> {
     public Exam endExam(UserEntity user, SubmitTicketDTO submitTicketDTO) {
         if (!user.getExams()
                 .stream()
-                .filter(it -> !it.getIsActive())
+                .filter(it -> it.getIsActive())
                 .collect(Collectors.toSet()).isEmpty()
         ) {
             Optional<Exam> examOptional = user
                     .getExams()
                     .stream()
-                    .filter(it -> !it.getIsActive())
+                    .filter(it -> it.getIsActive())
                     .findFirst();
             if (examOptional.isPresent()) {
                 var exam = examOptional.get();

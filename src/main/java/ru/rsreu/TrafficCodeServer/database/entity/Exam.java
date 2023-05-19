@@ -39,7 +39,7 @@ public class Exam {
     private Instant startDate;
 
     @Column(name = "NUMBER_CORRECT", length = 2, nullable = false)
-    private Long numberCorrect;
+    private Long numberCorrect = 0L;
 
     @Column(name = "END_DATE")
     private Instant endDate;

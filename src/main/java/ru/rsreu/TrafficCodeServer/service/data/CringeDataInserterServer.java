@@ -11,6 +11,7 @@ import ru.rsreu.TrafficCodeServer.database.entity.*;
 import ru.rsreu.TrafficCodeServer.database.repository.AnswerRepository;
 import ru.rsreu.TrafficCodeServer.database.repository.QuestionRepository;
 import ru.rsreu.TrafficCodeServer.database.repository.RoleRepository;
+import ru.rsreu.TrafficCodeServer.database.repository.UserRepository;
 import ru.rsreu.TrafficCodeServer.service.entity.AnswerService;
 import ru.rsreu.TrafficCodeServer.service.entity.TicketService;
 

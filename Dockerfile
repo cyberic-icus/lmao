@@ -1,18 +1,23 @@
-FROM openjdk:17-jdk-slim-buster AS builder
+FROM gradle:7.2.0-jdk17 AS TEMP_BUILD_IMAGE
+ENV APP_HOME=/usr/app/
+WORKDIR $APP_HOME
+COPY build.gradle settings.gradle $APP_HOME
 
-RUN apt-get update -y
-RUN apt-get install -y binutils
+COPY gradle $APP_HOME/gradle
+COPY --chown=gradle:gradle . /home/gradle/src
+USER root
+RUN chown -R gradle /home/gradle/src
 
-WORKDIR /app
-
+RUN gradle build || return 0
 COPY . .
+RUN gradle clean build
 
-RUN ./gradlew build -i --stacktrace
-RUN ./gradlew jlink -i --stacktrace
+FROM gradle:7.2.0-jdk17
+ENV ARTIFACT_NAME=TrafficCodeServer-0.0.1-SNAPSHOT.jar
+ENV APP_HOME=/usr/app/
 
-# lightweight image
-FROM debian:stretch-slim
+WORKDIR $APP_HOME
+COPY --from=TEMP_BUILD_IMAGE $APP_HOME/build/libs/$ARTIFACT_NAME .
 
-COPY --from=builder /app/app/build/image /app
-
-ENTRYPOINT /app/bin/app
+EXPOSE 8080
+ENTRYPOINT exec java -jar ${ARTIFACT_NAME}

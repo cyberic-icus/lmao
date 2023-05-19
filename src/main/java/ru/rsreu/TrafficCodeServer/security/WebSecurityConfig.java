@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,6 +26,14 @@ import ru.rsreu.TrafficCodeServer.security.services.UserDetailsServiceImpl;
         // jsr250Enabled = true,
         prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private static final String[] AUTH_LIST = {
+            "**/swagger-resources/**",
+            "/swagger-ui/index.html",
+            "/v2/api-docs",
+            "/webjars/**"
+    };
+
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 
@@ -58,15 +67,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**").permitAll()
-                .antMatchers("/utils/**").permitAll()
-                .antMatchers("/swagger-ui/**").permitAll()
-                .antMatchers("/**").permitAll()
-                .anyRequest().authenticated();
+                .authorizeRequests()
+                .antMatchers("**/api/auth/**").permitAll()
+                .antMatchers(AUTH_LIST).permitAll()
+                .antMatchers("**/api/test/**").authenticated()
+                .antMatchers("**/utils/**").authenticated()
+                .antMatchers("**/swagger-ui/**").permitAll();
         http.csrf().disable();
         http.headers().frameOptions().disable();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(AUTH_LIST);
     }
 }
