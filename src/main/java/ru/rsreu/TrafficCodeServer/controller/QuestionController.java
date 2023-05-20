@@ -1,10 +1,7 @@
 package ru.rsreu.TrafficCodeServer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.rsreu.TrafficCodeServer.dto.response.AnswerResponseFieldDTO;
 import ru.rsreu.TrafficCodeServer.dto.response.QuestionResponseFieldDTO;
 import ru.rsreu.TrafficCodeServer.service.entity.QuestionService;
@@ -13,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/questions")
 public class QuestionController {
     private final QuestionService questionService;

@@ -2,6 +2,7 @@ package ru.rsreu.TrafficCodeServer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.rsreu.TrafficCodeServer.service.data.CringeDataInserterServer;
@@ -10,6 +11,7 @@ import java.io.IOException;
 
 @Controller
 @RequestMapping("/utils/")
+@CrossOrigin(origins = "*")
 public class UtilsController {
 
     private final CringeDataInserterServer cringeDataInserterServer;

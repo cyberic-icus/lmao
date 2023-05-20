@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/exam")
+@CrossOrigin(origins = "*")
 public class ExamController {
     private final ExamService examService;
     private final UserRepository userRepository;
