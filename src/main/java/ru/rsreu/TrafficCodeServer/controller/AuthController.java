@@ -65,7 +65,11 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("jwtToken",
+                jwtCookie.getValue());
+
+        return ResponseEntity.ok().headers(responseHeaders)
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
                         userDetails.getEmail(),
