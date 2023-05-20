@@ -68,6 +68,8 @@ public class AuthController {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("jwtToken",
                 jwtCookie.getValue());
+        responseHeaders.set(HttpHeaders.SET_COOKIE,
+                jwtCookie.toString());
 
         return ResponseEntity.ok().headers(responseHeaders)
                 .body(new UserInfoResponse(userDetails.getId(),

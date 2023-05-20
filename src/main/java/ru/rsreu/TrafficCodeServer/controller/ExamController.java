@@ -32,9 +32,20 @@ public class ExamController {
 
 
     @GetMapping("/{id}")
-    public ExamIdDTO getExamById(@PathVariable Long ticket) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return new ExamIdDTO(examService.startExam(authentication, ticket));
+    public ExamDTO getExamById(@PathVariable Long id) {
+        var exam = examService.findById(id).get();
+        return new ExamDTO(
+                        exam.getId(),
+                        exam.getStartDate(),
+                        exam.getNumberCorrect(),
+                        exam.getEndDate(),
+                        exam.getIsActive(),
+                        exam.getTicket().getId(),
+                        exam.getIncorrectQuestions()
+                                .stream()
+                                .map(Question::getId)
+                                .collect(Collectors.toSet())
+                );
     }
 
     @GetMapping("/user/")
